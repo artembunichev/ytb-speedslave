@@ -1,0 +1,21 @@
+{
+	
+	"name" : "ytb-speedslave"
+	,
+	"version" : "1.0"
+	,
+	"manifest_version" : 3
+	,
+	"content_scripts" : [
+		{
+			"world" : "MAIN"
+			,
+			"matches" : [ "https://www.youtube.com/*" ]
+			,
+			"js" : [ "speedslave.js" ]
+			,
+			"css" : [ "speedslave.css" ]
+		}
+	]
+	
+}
