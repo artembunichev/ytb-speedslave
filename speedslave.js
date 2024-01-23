@@ -6,13 +6,27 @@ var video_mdown_state ;
 var mholding = false;
 
 var revision_interval_id ;
+var video_elem ;
+var cur_speed;
 
 
 
 window.addEventListener(
 	"mouseup"
 	,
-	()=> { video_mdown = false ; mholding = false;}
+	()=> {
+		if(
+			( video_mdown )
+			&&
+			(video_elem !== undefined)
+			&&
+			( cur_speed !== undefined )
+		)
+		{
+			video_elem.playbackRate = cur_speed;
+		}
+		video_mdown = false ; mholding = false;
+	}
 );
 
 
@@ -21,12 +35,11 @@ function cancel_speedup
 (
 	player_obj
 	,
-	cur_speed
-	,
 	cur_state
 )
 {
 	
+	video_elem.playbackRate = cur_speed;
 	if( cur_state === 2 )
 	{
 		
@@ -34,7 +47,6 @@ function cancel_speedup
 		
 	}
 	
-	player_obj.setPlaybackRate( cur_speed );
 	
 };
 
@@ -94,8 +106,6 @@ function player_mdown
 	e
 	,
 	player_obj
-	,
-	video_elem
 )
 {
 	if(
@@ -110,7 +120,7 @@ function player_mdown
 		
 		video_mdown = true ;
 		
-		var cur_speed = ( player_obj.getPlaybackRate() );
+		cur_speed = ( video_elem.playbackRate );
 		var cur_state = player_obj.getPlayerState() ;
 		video_mdown_state = cur_state;
 		
@@ -129,8 +139,6 @@ function player_mdown
 				
 				cancel_speedup(
 					player_obj
-					,
-					cur_speed
 					,
 					cur_state
 				);
@@ -165,8 +173,6 @@ function player_mdown
 							{
 								cancel_speedup(
 									player_obj
-									,
-									cur_speed
 									,
 									cur_state
 								);
@@ -223,7 +229,7 @@ function proxify_player()
 						
 						var player_obj = document.getElementById( "movie_player" ) ;
 						
-						var video_elem = (
+						video_elem = (
 							document.getElementsByClassName(
 								"html5-main-video"
 							)[ 0 ]
@@ -240,8 +246,6 @@ function proxify_player()
 									e
 									,
 									player_obj
-									,
-									video_elem
 								)
 							}
 							,
