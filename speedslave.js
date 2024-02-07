@@ -119,7 +119,6 @@ function player_mdown
 		
 		
 		video_mdown = true ;
-		
 		cur_speed = ( video_elem.playbackRate );
 		var cur_state = player_obj.getPlayerState() ;
 		video_mdown_state = cur_state;
@@ -197,79 +196,91 @@ function player_mdown
 
 
 
+
+function wait_for_elem
+(
+	elem_id
+	,
+	callback
+)
+{
+	
+	var check = ()=>{
+		var elem = ( document.getElementById( elem_id )) ?? null ;
+		if( elem === null )
+		{
+			setTimeout( check , 50 );
+		}
+		
+		else
+		{
+			callback( elem );
+			
+			}
+	};
+	
+	check();
+	
+};
+
+
+
 function proxify_player()
 {
 	
-	var player_container = (
-		document.getElementById( "player-container" )
-	) ;
-	
-	if( player_container !== null )
-	{
-		
-		var player_elem = null ;
-		var interval_id ;
-		
-		interval_id = (
-			setInterval(
-				()=> {
+	wait_for_elem(
+		"player-container"
+		,
+		( player_container )=> {
+			
+			
+			wait_for_elem(
+				"ytd-player"
+				,
+				
+				( player_elem)=> {
 					
-					player_elem = (
-						( document.getElementById( "ytd-player" ) )
+					player_elem = ( player_elem.firstElementChild );
+						
+					
+					var player_obj = document.getElementById( "movie_player" ) ;
+					
+					video_elem = (
+						document.getElementsByClassName(
+							"html5-main-video"
+						)[ 0 ]
 					);
 					
 					
-					if( player_elem !== null )
-					{
-						
-						clearInterval( interval_id ) ;
-						
-						player_elem = ( player_elem.firstElementChild );
-						
-						
-						var player_obj = document.getElementById( "movie_player" ) ;
-						
-						video_elem = (
-							document.getElementsByClassName(
-								"html5-main-video"
-							)[ 0 ]
-						);
-						
-						
-						
-						
-						player_elem.addEventListener(
-							"mousedown"
-							,
-							( e )=> {
-								player_mdown(
-									e
-									,
-									player_obj
-								)
-							}
-							,
-							false
-						);
-						
-						
-						player_elem.addEventListener(
-							"mouseup"
-							,
-							()=> { player_mup( player_obj ) }
-							,
-							true
-						);
-						
-					}
+					
+					
+					player_elem.addEventListener(
+						"mousedown"
+						,
+						( e )=> {
+							player_mdown(
+								e
+								,
+								player_obj
+							)
+						}
+						,
+						false
+					);
+					
+					
+					player_elem.addEventListener(
+						"mouseup"
+						,
+						()=> { player_mup( player_obj ) }
+						,
+						true
+					);
 					
 				}
-				,
-				50
-			)
-		);
-		
-	}
+			);
+		}
+	);
 	
 } ;
 
