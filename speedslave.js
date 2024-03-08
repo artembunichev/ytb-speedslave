@@ -223,6 +223,32 @@ function wait_for_elem
 	
 };
 
+function wait_for_elem_class
+(
+	elem_class
+	,
+	callback
+)
+{
+	
+	var check = ()=>{
+		var elem = ( document.getElementsByClassName( elem_class )) [ 0 ] ?? null ;
+		if( elem === null )
+		{
+			setTimeout( check , 50 );
+		}
+		
+		else
+		{
+			callback( elem );
+			
+			}
+	};
+	
+	check();
+	
+};
+
 
 
 function proxify_player()
@@ -243,39 +269,51 @@ function proxify_player()
 					player_elem = ( player_elem.firstElementChild );
 						
 					
+					
 					var player_obj = document.getElementById( "movie_player" ) ;
 					
-					video_elem = (
-						document.getElementsByClassName(
-							"html5-main-video"
-						)[ 0 ]
-					);
-					
-					
-					
-					
-					player_elem.addEventListener(
-						"mousedown"
+					wait_for_elem_class(
+						"html5-main-video"
 						,
-						( e )=> {
-							player_mdown(
-								e
+						
+						(v_elem)=> {
+							video_elem = v_elem ;
+							
+							wait_for_elem(
+								"movie_player"
 								,
-								player_obj
-							)
+								(player_obj)=> {
+									
+									player_elem.addEventListener(
+										"mousedown"
+										,
+										( e )=> {
+											player_mdown(
+												e
+												,
+												player_obj
+											)
+										}
+										,
+										false
+									);
+									
+									
+									player_elem.addEventListener(
+										"mouseup"
+										,
+										()=> { player_mup( player_obj ) }
+										,
+										true
+									);
+									
+								}
+							);
+							
 						}
-						,
-						false
 					);
 					
 					
-					player_elem.addEventListener(
-						"mouseup"
-						,
-						()=> { player_mup( player_obj ) }
-						,
-						true
-					);
 					
 				}
 			);
