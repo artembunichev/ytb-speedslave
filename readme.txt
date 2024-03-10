@@ -14,6 +14,8 @@ Installation:
 
 1. Clone this repo:
 	git clone https://github.com/artembunichev/ytb-speedslave
+	or
+	download ZIP and unpack.
 
 2. Open "chrome://extensions/" turn on "Developer mode", click "Load unpacked" and select directory with ytb-speedslave extension.
 
